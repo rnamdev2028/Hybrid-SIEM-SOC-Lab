@@ -1,0 +1,5 @@
+ip,threat_type,severity,description
+192.168.1.50,Brute_Force,High,Known Attacker IP
+45.33.22.11,Malware_C2,Critical,Botnet Command Center
+10.0.0.25,Scanner,Low,Network Scanning Tool
+8.8.8.8,Safe,Info,Google DNS (Testing)

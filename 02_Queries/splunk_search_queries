@@ -1,0 +1,16 @@
+--- LINUX BRUTE FORCE QUERY ---
+index="*" source="/var/log/splunk_test/kali_logs.log" "BRUTE_FORCE_EVENT"
+| rex field=_raw "user '(?<user>[^']+)' from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count AS attempt_count BY user, src_ip
+| where attempt_count > 5
+
+--- WINDOWS FAILED LOGIN QUERY ---
+index="*" sourcetype="WinEventLog:Security" EventCode=4625
+| stats count BY user, src_ip
+| where count > 5
+
+--- THREAT INTEL LOOKUP ---
+index="*" source="/var/log/splunk_test/kali_logs.log"
+| rex field=_raw "source_ip=(?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| lookup threat_intel_lookup ip AS src_ip OUTPUT threat_type, severity
+| where isnotnull(threat_type)
